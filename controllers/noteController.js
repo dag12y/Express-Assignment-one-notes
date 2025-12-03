@@ -35,6 +35,7 @@ export async function writeNote(req, res) {
     });
 }
 
+//delete note
 export function deleteNote(req, res) {
     const name = req.query.name;
     if (!name) return res.status(400).send("Filename is required");
@@ -47,5 +48,17 @@ export function deleteNote(req, res) {
         res.send("Note deleted successfully!");
     });
 }
+//append note
+export function appendNote(req, res) {
+    const name = req.query.name;
+    if (!name) return res.status(400).send("Filename is required");
 
+    const filePath = path.join(filesDir, name + ".txt");
+    const content = `\n${req.body}` || "";
+
+    fs.appendFile(filePath, content, (err) => {
+        if (err) return res.status(500).send("Error appending note");
+        res.send("Note updated (appended) successfully!");
+    });
+}
 
