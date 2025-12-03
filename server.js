@@ -1,15 +1,19 @@
-import express from 'express'
-import noteRouter from './routers/noteRouter.js'
+import express from "express";
+import noteRouter from "./routes/noteRouter.js"; 
+import { notFound } from "./middleware/notFound.js";
 
-const app=express();
+const app = express();
 const PORT = 3000;
 
-//built-in middleware
-app.use(express.text()); 
+// Middleware to parse raw text bodies
+app.use(express.text());
 
-//calling routers
-app.use('/api/note',noteRouter)
+// Use note router
+app.use("/api/note", noteRouter);
 
-app.listen(PORT,()=>{
-    console.log('server is running on port number ',PORT)
-})
+// Catch-all 404 middleware
+app.use(notFound);
+
+app.listen(PORT, () => {
+    console.log("Server is running on port", PORT);
+});
