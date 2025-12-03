@@ -22,5 +22,14 @@ export async function readNote(req, res) {
     });
 }
 export async function writeNote(req, res) {
-    res.send("Write note placeholder");
+    const name = req.query.name;
+    if (!name) return res.status(400).send("Filename is required");
+
+    const filePath = path.join(filesDir, name + ".txt");
+    const content = req.body || "";
+
+    fs.writeFile(filePath, content, (err) => {
+        if (err) return res.status(500).send("Error saving note");
+        res.send("Note saved successfully!");
+    });
 }
